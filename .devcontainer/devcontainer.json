@@ -1,0 +1,48 @@
+{
+    "name": "ANS-SS25",
+    "privileged": true,
+
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "configureZshAsDefaultShell": true
+        },
+        "ghcr.io/devcontainers/features/desktop-lite:1": {},
+        // "ghcr.io/devcontainers/features/python:1": {}
+    },
+    // "postStartCommand": "virtualenv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt || true",
+    
+    "runArgs": ["--privileged"], 
+    "mounts": [
+        "source=/lib/modules,target=/lib/modules,type=bind",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+
+    "forwardPorts": [
+        6080,
+        5901
+    ],
+    "portsAttributes": {
+        "6080": {
+            "label": "desktop",
+            "onAutoForward": "notify"
+        },
+        "5901":{
+            "label": "vnc",
+            "onAutoForward": "notify"
+        }
+    },
+
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
+            }
+        }
+    }
+}
